@@ -1,0 +1,5 @@
+{
+  "language": "js",
+  "client": "rest",
+  "start": "yarn start"
+}

@@ -1,0 +1,5 @@
+{
+  "language": "js",
+  "client": "graphql",
+  "start": "yarn start"
+}

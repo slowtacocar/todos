@@ -4,7 +4,7 @@
   "type": "module",
   "dependencies": {
     "serve": "^13.0.2",
-    "todos-client": "../../clients/rest"
+    "todos-client": "../../clients/graphql"
   },
   "scripts": {
     "start": "serve"

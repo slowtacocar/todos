@@ -28,10 +28,16 @@ export default function App() {
 
   return (
     <>
-      <h2>To Do</h2>
-      {data.map((todo) => (
-        <Todo key={todo.id} todo={todo} onChange={mutate} />
-      ))}
+      <h1>To Do</h1>
+      <h2>Remaining Tasks</h2>
+      <ul>
+        {data.map((todo) => (
+          <li key={todo.id}>
+            <Todo todo={todo} onChange={mutate} />
+          </li>
+        ))}
+      </ul>
+      <h2>New Task</h2>
       <form onSubmit={handleAdd}>
         <input
           value={text}

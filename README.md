@@ -54,25 +54,24 @@ The client should be written as a JavaScript ES module and should export the fol
 
 Fetches a list of todos from the API.
 
-Returns an array of todo objects (`[{ id: string, text: string }]`)
+Returns an array of todo objects (`[{ id: string, text: string, done: boolean }]`)
 
 ### `addTodo(todo)`
 
 Creates a todo item.
 
-The `todo` parameter is a todo object without an ID: `{ text: string }`
+The `todo` parameter is a todo object without an ID: `{ text: string, done: boolean }`
 
-Returns a todo object: `{ id: string, text: string }`
+Returns a todo object: `{ id: string, text: string, done: boolean }`
 
 ### `updateTodo(id, update)`
 
 Updates an existing todo item.
 
-The `id` parameter is a todo object ID to update. The `update` parameter is an object with properties to update: `{ text?: string }`
+The `id` parameter is a todo object ID to update. The `update` parameter is an object with properties to update: `{ text?: string, done?: boolean }`
 
 ### `deleteTodo(id)`
 
 Deletes a todo item.
 
 The `id` parameter is a todo object ID to delete.
-

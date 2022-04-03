@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { deleteTodo, updateTodo } from "todos-client";
 
 export default function Todo({ todo, onChange }) {
+  const [editing, setEditing] = useState(false);
   const [text, setText] = useState(todo.text);
 
   useEffect(() => {
@@ -11,29 +12,55 @@ export default function Todo({ todo, onChange }) {
   function handleUpdate(event) {
     event.preventDefault();
 
-    updateTodo(todo.id, { text }).catch(() => {
-      alert("Failed to update");
-    });
-    onChange();
+    updateTodo(todo.id, { text })
+      .then(onChange)
+      .catch(() => {
+        alert("Failed to update");
+      });
+    setEditing(false);
+  }
+
+  function handleCheck(event) {
+    updateTodo(todo.id, { done: event.target.checked })
+      .then(onChange)
+      .catch(() => {
+        alert("Failed to check");
+      });
   }
 
   function handleDelete() {
-    deleteTodo(todo.id).catch(() => {
-      alert("Failed to delete");
-    });
-    onChange();
+    deleteTodo(todo.id)
+      .then(onChange)
+      .catch(() => {
+        alert("Failed to delete");
+      });
   }
 
   return (
     <div>
-      <form onSubmit={handleUpdate}>
-        <input
-          value={text}
-          onChange={(event) => setText(event.target.value)}
-          required
-        />
-        <button type="submit">Update</button>
-      </form>
+      {editing ? (
+        <form onSubmit={handleUpdate}>
+          <input
+            value={text}
+            onChange={(event) => setText(event.target.value)}
+            required
+          />
+          <button type="submit">Update</button>
+        </form>
+      ) : (
+        <div>
+          <input
+            id={todo.id}
+            type="checkbox"
+            checked={todo.done}
+            onChange={handleCheck}
+          />
+          <label htmlFor={todo.id}>{todo.text}</label>
+        </div>
+      )}
+      <button onClick={() => setEditing((editing) => !editing)}>
+        {editing ? "Cancel" : "Edit"}
+      </button>
       <button onClick={handleDelete}>Delete</button>
     </div>
   );

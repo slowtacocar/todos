@@ -1,0 +1,12 @@
+{
+  "name": "todos-frontend",
+  "version": "0.1.0",
+  "type": "module",
+  "dependencies": {
+    "serve": "^13.0.2",
+    "todos-client": "../../clients/rest"
+  },
+  "scripts": {
+    "start": "serve"
+  }
+}

@@ -16,7 +16,7 @@ export default function App() {
   function handleAdd(event) {
     event.preventDefault();
 
-    addTodo({ text })
+    addTodo({ text, done: false })
       .then(mutate)
       .catch(() => {
         alert("Failed to add");

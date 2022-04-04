@@ -1,0 +1,3 @@
+{
+  "installer": "yarn add ../../databases/js/ephemeral"
+}

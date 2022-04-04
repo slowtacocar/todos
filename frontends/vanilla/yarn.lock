@@ -723,10 +723,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"todos-client@file:../../clients/graphql::locator=todos-frontend%40workspace%3A.":
+"todos-client@file:../../clients/rest::locator=todos-frontend%40workspace%3A.":
   version: 0.1.0
-  resolution: "todos-client@file:../../clients/graphql#../../clients/graphql::hash=118f07&locator=todos-frontend%40workspace%3A."
-  checksum: e420ca01910d197d941699c1a3c87af23c1d41c8c4c2bedad689a66a9f9db78737d9690ded489391ac1bfdcc2f02e8e09c0c3d35ace9f80f61f1c7482bf14e43
+  resolution: "todos-client@file:../../clients/rest#../../clients/rest::hash=72c449&locator=todos-frontend%40workspace%3A."
+  checksum: 139cc067e260fb4cafe9be2067ac34f3dd4a68619d172d568313a2ccefcb2e6359adc55e94017b7c985e09e3c3d51f6a4bcd6f7633bd38645ded1869b81c1c1a
   languageName: node
   linkType: hard
 
@@ -735,7 +735,7 @@ __metadata:
   resolution: "todos-frontend@workspace:."
   dependencies:
     serve: ^13.0.2
-    todos-client: ../../clients/graphql
+    todos-client: ../../clients/rest
   languageName: unknown
   linkType: soft
 

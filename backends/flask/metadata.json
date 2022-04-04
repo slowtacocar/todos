@@ -1,0 +1,5 @@
+{
+  "language": "python",
+  "client": "rest",
+  "start": "python3 -m flask run"
+}

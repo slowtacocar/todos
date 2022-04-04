@@ -1,0 +1,3 @@
+{
+  "installer": "pip3 install -e ../../databases/python/ephemeral"
+}

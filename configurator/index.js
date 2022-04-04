@@ -28,6 +28,16 @@ const databaseMetadataFile = await fs.readFile(
 );
 const databaseMetadata = JSON.parse(databaseMetadataFile);
 
+const env =
+  databaseMetadata.env &&
+  (await prompts(
+    databaseMetadata.env.map((name) => ({
+      type: "text",
+      name,
+      message: name,
+    }))
+  ));
+
 child_process.execSync(databaseMetadata.installer, {
   cwd: `../backends/${backend}`,
 });
@@ -52,6 +62,7 @@ child_process.execSync(`yarn add ../../clients/${backendMetadata.client}`, {
 const [backendStart, ...backendArgs] = backendMetadata.start.split(" ");
 const backendProcess = child_process.spawn(backendStart, backendArgs, {
   cwd: `../backends/${backend}`,
+  env: { ...process.env, ...env },
 });
 backendProcess.stdout.setEncoding("utf-8");
 backendProcess.stderr.setEncoding("utf-8");

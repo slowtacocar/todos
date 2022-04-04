@@ -1,3 +1,4 @@
 {
-  "installer": "yarn add ../../databases/js/mongodb"
+  "installer": "yarn add ../../databases/js/mongodb",
+  "env": ["DB_URI"]
 }

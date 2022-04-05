@@ -1,0 +1,5 @@
+{
+  "language": "go",
+  "client": "rest",
+  "start": "go run main.go"
+}

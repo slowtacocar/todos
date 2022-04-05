@@ -1,0 +1,3 @@
+{
+  "installer": "sed -i '' '6s/.*/replace todos-database => ..\\/..\\/databases\\/go\\/ephemeral/' go.mod"
+}

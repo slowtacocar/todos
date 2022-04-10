@@ -11109,8 +11109,16 @@ __metadata:
     react-dom: ^18.0.0
     react-scripts: 5.0.0
     todos-client: ../../clients/rest
+    todos-theme: ../../themes/test
   languageName: unknown
   linkType: soft
+
+"todos-theme@file:../../themes/test::locator=todos-frontend%40workspace%3A.":
+  version: 0.1.0
+  resolution: "todos-theme@file:../../themes/test#../../themes/test::hash=713239&locator=todos-frontend%40workspace%3A."
+  checksum: ebaa89c5b2620110420c03e71a6f17817feb2c49f89012286598bcac38555d3c91a2e9c24a2f84523c668cc8dad19edda8bd016193a30b8e401259ccac5fb8ee
+  languageName: node
+  linkType: hard
 
 "toidentifier@npm:1.0.1":
   version: 1.0.1

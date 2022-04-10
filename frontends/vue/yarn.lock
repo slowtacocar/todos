@@ -1338,10 +1338,18 @@ __metadata:
   dependencies:
     "@vitejs/plugin-vue": ^2.3.1
     todos-client: ../../clients/rest
+    todos-theme: ../../themes/test
     vite: ^2.9.1
     vue: ^3.2.31
   languageName: unknown
   linkType: soft
+
+"todos-theme@file:../../themes/test::locator=todos-frontend%40workspace%3A.":
+  version: 0.1.0
+  resolution: "todos-theme@file:../../themes/test#../../themes/test::hash=2cf4ec&locator=todos-frontend%40workspace%3A."
+  checksum: 253c50fc2035d160c225116d77f79ae864a3a1ef09ee1cf03c321726761f6f2f135721901a73bb556cbe63dce3979b5ee891191029fa7cbf334fd6fbaf69264b
+  languageName: node
+  linkType: hard
 
 "unique-filename@npm:^1.1.1":
   version: 1.1.1

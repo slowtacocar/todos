@@ -15,6 +15,7 @@
   },
   "type": "module",
   "dependencies": {
-    "todos-client": "../../clients/rest"
+    "todos-client": "../../clients/rest",
+    "todos-theme": "../../themes/test"
   }
 }

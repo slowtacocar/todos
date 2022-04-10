@@ -1,4 +1,6 @@
 <script>
+  import "todos-theme/index.css";
+  
   import Todo from "../components/Todo.svelte";
   import { addTodo, getTodos } from "todos-client";
   

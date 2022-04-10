@@ -4,7 +4,8 @@
   "type": "module",
   "dependencies": {
     "serve": "^13.0.2",
-    "todos-client": "../../clients/rest"
+    "todos-client": "../../clients/rest",
+    "todos-theme": "../../themes/test"
   },
   "scripts": {
     "start": "serve"

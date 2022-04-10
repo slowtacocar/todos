@@ -38,10 +38,6 @@ const env =
     }))
   ));
 
-child_process.execSync(databaseMetadata.installer, {
-  cwd: `../backends/${backend}`,
-});
-
 const frontends = await fs.readdir("../frontends");
 const { frontend } = await prompts({
   type: "select",
@@ -55,7 +51,24 @@ const frontendMetadataFile = await fs.readFile(
 );
 const frontendMetadata = JSON.parse(frontendMetadataFile);
 
+const themes = await fs.readdir("../themes");
+const { theme } = await prompts({
+  type: "select",
+  name: "theme",
+  message: "Pick a theme",
+  choices: themes.map((value) => ({ value })),
+});
+if (!theme) process.exit();
+
+child_process.execSync(databaseMetadata.installer, {
+  cwd: `../backends/${backend}`,
+});
+
 child_process.execSync(`yarn add ../../clients/${backendMetadata.client}`, {
+  cwd: `../frontends/${frontend}`,
+});
+
+child_process.execSync(`yarn add ../../themes/${theme}`, {
   cwd: `../frontends/${frontend}`,
 });
 

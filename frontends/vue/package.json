@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "todos-client": "../../clients/rest",
+    "todos-theme": "../../themes/test",
     "vue": "^3.2.31"
   },
   "devDependencies": {

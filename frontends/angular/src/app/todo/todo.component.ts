@@ -19,7 +19,7 @@ import { FormControl, FormGroup } from "@angular/forms";
         *ngIf="editing; else check"
       >
         <input formControlName="text" required />
-        <button type="submit">Update</button>
+        <button>Update</button>
       </form>
       <ng-template #check>
         <div>
@@ -33,10 +33,10 @@ import { FormControl, FormGroup } from "@angular/forms";
         </div>
       </ng-template>
 
-      <button (click)="editing = !editing">
+      <button type="button" (click)="editing = !editing">
         {{ editing ? "Cancel" : "Edit" }}
       </button>
-      <button (click)="handleDelete()">Delete</button>
+      <button type="button" (click)="handleDelete()">Delete</button>
     </div>
   `,
   styles: [],

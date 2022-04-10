@@ -45,7 +45,7 @@ export default function Todo({ todo, onChange }) {
             onChange={(event) => setText(event.target.value)}
             required
           />
-          <button type="submit">Update</button>
+          <button>Update</button>
         </form>
       ) : (
         <div>
@@ -58,10 +58,10 @@ export default function Todo({ todo, onChange }) {
           <label htmlFor={todo.id}>{todo.text}</label>
         </div>
       )}
-      <button onClick={() => setEditing((editing) => !editing)}>
+      <button type="button" onClick={() => setEditing((editing) => !editing)}>
         {editing ? "Cancel" : "Edit"}
       </button>
-      <button onClick={handleDelete}>Delete</button>
+      <button type="button" onClick={handleDelete}>Delete</button>
     </div>
   );
 }

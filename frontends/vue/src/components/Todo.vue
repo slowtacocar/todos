@@ -37,7 +37,7 @@ function handleDelete() {
   <div>
     <form @submit.prevent="handleUpdate" v-if="editing">
       <input v-model="text" required />
-      <button type="submit">Update</button>
+      <button>Update</button>
     </form>
     <div v-else>
       <input
@@ -49,9 +49,9 @@ function handleDelete() {
       <label :for="todo.id">{{ todo.text }}</label>
     </div>
 
-    <button @click="editing = !editing">
+    <button type="button" @click="editing = !editing">
       {{ editing ? "Cancel" : "Edit" }}
     </button>
-    <button @click="handleDelete">Delete</button>
+    <button type="button" @click="handleDelete">Delete</button>
   </div>
 </template>

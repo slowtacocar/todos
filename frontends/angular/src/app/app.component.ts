@@ -19,7 +19,7 @@ import { FormControl, FormGroup } from "@angular/forms";
         <h2>New Task</h2>
         <form (ngSubmit)="handleAdd()" [formGroup]="addGroup">
           <input formControlName="text" required />
-          <button type="submit">Add</button>
+          <button>Add</button>
         </form>
       </ng-template>
     </ng-template>

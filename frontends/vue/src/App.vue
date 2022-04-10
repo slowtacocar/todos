@@ -38,7 +38,7 @@ onMounted(mutate);
     <h2>New Task</h2>
     <form @submit.prevent="handleAdd">
       <input v-model="text" required />
-      <button type="submit">Add</button>
+      <button>Add</button>
     </form>
   </template>
 </template>

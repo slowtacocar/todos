@@ -44,7 +44,7 @@ export default function App() {
           onChange={(event) => setText(event.target.value)}
           required
         />
-        <button type="submit">Add</button>
+        <button>Add</button>
       </form>
     </>
   );

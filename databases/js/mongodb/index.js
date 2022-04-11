@@ -1,10 +1,6 @@
-import { MongoClient, ObjectId, ServerApiVersion } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 
-const client = new MongoClient(process.env.DB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverApi: ServerApiVersion.v1,
-});
+const client = new MongoClient(`mongodb://admin:${process.env.DB_PASS}@localhost`);
 await client.connect();
 const todos = client.db("Todos").collection("todos");
 

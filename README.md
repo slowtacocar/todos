@@ -75,3 +75,7 @@ The `id` parameter is a todo object ID to update. The `update` parameter is an o
 Deletes a todo item.
 
 The `id` parameter is a todo object ID to delete.
+
+## Themes
+
+The `themes` folder contains a subfolder for each CSS theme. Each theme is structured as an ES module and should contain an `index.css` with the styles.

@@ -1,5 +1,6 @@
 {
   "language": "python",
   "client": "rest",
-  "start": "python3 -m flask run"
+  "start": "python3 -m flask run",
+  "install": "python3 -m pip install -r requirements.txt"
 }

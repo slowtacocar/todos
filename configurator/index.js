@@ -1,6 +1,7 @@
 import prompts from "prompts";
 import fs from "fs/promises";
 import child_process from "child_process";
+import crypto from "crypto";
 
 const backends = await fs.readdir("../backends");
 const { backend } = await prompts({
@@ -28,16 +29,6 @@ const databaseMetadataFile = await fs.readFile(
 );
 const databaseMetadata = JSON.parse(databaseMetadataFile);
 
-const env =
-  databaseMetadata.env &&
-  (await prompts(
-    databaseMetadata.env.map((name) => ({
-      type: "text",
-      name,
-      message: name,
-    }))
-  ));
-
 const frontends = await fs.readdir("../frontends");
 const { frontend } = await prompts({
   type: "select",
@@ -60,22 +51,43 @@ const { theme } = await prompts({
 });
 if (!theme) process.exit();
 
+child_process.execSync(backendMetadata.install, {
+  cwd: `../backends/${backend}`,
+});
 child_process.execSync(databaseMetadata.installer, {
   cwd: `../backends/${backend}`,
 });
-
+child_process.execSync("yarn install", {
+  cwd: `../frontends/${frontend}`,
+});
 child_process.execSync(`yarn add ../../clients/${backendMetadata.client}`, {
   cwd: `../frontends/${frontend}`,
 });
-
 child_process.execSync(`yarn add ../../themes/${theme}`, {
   cwd: `../frontends/${frontend}`,
 });
 
+const pass = crypto.randomUUID();
+
+if (databaseMetadata.start) {
+  const [databaseStart, ...databaseArgs] = databaseMetadata.start
+    .replace("$DB_PASS", pass)
+    .split(" ");
+  const databaseProcess = child_process.spawn(databaseStart, databaseArgs, {
+    cwd: `../databases/${backendMetadata.language}/${database}`,
+  });
+  databaseProcess.stdout.on("data", (data) => {
+    console.log("Database: " + data);
+  });
+  databaseProcess.stderr.on("data", (data) => {
+    console.error("Database: " + data);
+  });
+}
+
 const [backendStart, ...backendArgs] = backendMetadata.start.split(" ");
 const backendProcess = child_process.spawn(backendStart, backendArgs, {
   cwd: `../backends/${backend}`,
-  env: { ...process.env, ...env },
+  env: { ...process.env, DB_PASS: pass },
 });
 backendProcess.stdout.setEncoding("utf-8");
 backendProcess.stderr.setEncoding("utf-8");

@@ -11109,14 +11109,14 @@ __metadata:
     react-dom: ^18.0.0
     react-scripts: 5.0.0
     todos-client: ../../clients/rest
-    todos-theme: ../../themes/test
+    todos-theme: ../../themes/none
   languageName: unknown
   linkType: soft
 
-"todos-theme@file:../../themes/test::locator=todos-frontend%40workspace%3A.":
+"todos-theme@file:../../themes/none::locator=todos-frontend%40workspace%3A.":
   version: 0.1.0
-  resolution: "todos-theme@file:../../themes/test#../../themes/test::hash=713239&locator=todos-frontend%40workspace%3A."
-  checksum: ebaa89c5b2620110420c03e71a6f17817feb2c49f89012286598bcac38555d3c91a2e9c24a2f84523c668cc8dad19edda8bd016193a30b8e401259ccac5fb8ee
+  resolution: "todos-theme@file:../../themes/none#../../themes/none::hash=86d531&locator=todos-frontend%40workspace%3A."
+  checksum: cd37b56d4dbf230a65e9654cb8d5ebffbcf6e6066964443df24e9c5369f36cc80c34373aa70cf1890a05418ca4dce884a9446074a6685b5c9db94dd093596c98
   languageName: node
   linkType: hard
 

@@ -8215,17 +8215,17 @@ __metadata:
     copy: ^0.3.2
     rxjs: ~7.5.0
     todos-client: ../../clients/rest
-    todos-theme: ../../themes/test
+    todos-theme: ../../themes/none
     tslib: ^2.3.0
     typescript: ~4.6.2
     zone.js: ~0.11.4
   languageName: unknown
   linkType: soft
 
-"todos-theme@file:../../themes/test::locator=todos-frontend%40workspace%3A.":
+"todos-theme@file:../../themes/none::locator=todos-frontend%40workspace%3A.":
   version: 0.1.0
-  resolution: "todos-theme@file:../../themes/test#../../themes/test::hash=34b6be&locator=todos-frontend%40workspace%3A."
-  checksum: d4d769ba8066e99c7afa5c9c0191456f694c4242a5eba094357e105d2c201177d5d76aa143c98d4391ea7d8f8144cead6cd1daaece956a487f2dcd4dad76386c
+  resolution: "todos-theme@file:../../themes/none#../../themes/none::hash=86d531&locator=todos-frontend%40workspace%3A."
+  checksum: cd37b56d4dbf230a65e9654cb8d5ebffbcf6e6066964443df24e9c5369f36cc80c34373aa70cf1890a05418ca4dce884a9446074a6685b5c9db94dd093596c98
   languageName: node
   linkType: hard
 

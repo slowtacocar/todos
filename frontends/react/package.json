@@ -6,7 +6,7 @@
     "react-dom": "^18.0.0",
     "react-scripts": "5.0.0",
     "todos-client": "../../clients/rest",
-    "todos-theme": "../../themes/test"
+    "todos-theme": "../../themes/none"
   },
   "scripts": {
     "start": "react-scripts start",

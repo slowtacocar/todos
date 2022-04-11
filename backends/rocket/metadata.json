@@ -1,0 +1,5 @@
+{
+  "language": "rust",
+  "client": "rest",
+  "start": "cargo run"
+}

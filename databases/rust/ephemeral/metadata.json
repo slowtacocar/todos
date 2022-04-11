@@ -1,0 +1,3 @@
+{
+  "installer": "sed -i '' '10s/.*/todos_database = { path = \\\"..\\/..\\/databases\\/rust\\/ephemeral\\\" }/' Cargo.toml"
+}

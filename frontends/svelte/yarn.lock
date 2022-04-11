@@ -1339,14 +1339,14 @@ __metadata:
     "@sveltejs/kit": next
     svelte: ^3.44.0
     todos-client: ../../clients/rest
-    todos-theme: ../../themes/test
+    todos-theme: ../../themes/none
   languageName: unknown
   linkType: soft
 
-"todos-theme@file:../../themes/test::locator=todos-frontend%40workspace%3A.":
+"todos-theme@file:../../themes/none::locator=todos-frontend%40workspace%3A.":
   version: 0.1.0
-  resolution: "todos-theme@file:../../themes/test#../../themes/test::hash=d78040&locator=todos-frontend%40workspace%3A."
-  checksum: 44f045c3fd2e8f95875072d53ba354dc58432315a7365205160ea86750a4b594804837a8940e43c096fafd5c152082e74bf8c826ee50a56a4c7118d1ef7a7d4b
+  resolution: "todos-theme@file:../../themes/none#../../themes/none::hash=86d531&locator=todos-frontend%40workspace%3A."
+  checksum: cd37b56d4dbf230a65e9654cb8d5ebffbcf6e6066964443df24e9c5369f36cc80c34373aa70cf1890a05418ca4dce884a9446074a6685b5c9db94dd093596c98
   languageName: node
   linkType: hard
 

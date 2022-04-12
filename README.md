@@ -2,17 +2,19 @@
 
 Modular todo list apps in many web frameworks
 
+To run the configurator, you must have Node.js as well as Yarn installed globally. Additionally, every database (except "ephemeral") will run as a container and thus requires Docker to be installed.
+
 ## Configuration
 
 The `configurator` folder contains a Node.js script for configuring a frontend, backend, and database.
 
-`cd` into the `configurator` directory and run `yarn start` to run the script. The script should prompt you for a frontend, backend, and database; install everything; and start both the frontend and the backend.
+`cd` into the `configurator` directory and run a `yarn install` and then `yarn start` to run the script. The script should prompt you for a frontend, backend, database, and theme; install everything; and start the frontend, the backend, and the database container.
 
 ## Frontends
 
 The `frontends` folder contains a subfolder for each frontend framework. Regardless of the framework, each frontend uses Yarn to install packages (including the modular API client).
 
-The frontend can reference a package named `todos-client` that refers to the client module. This can be used to fetch and update todo items from any API; refer to the clients section for info on the available methods.
+The frontend can reference a package named `todos-client` that refers to the client module. The frontend should also import the `index.css` under `todos-themes` for modular styles. This can be used to fetch and update todo items from any API; refer to the clients section for info on the available methods.
 
 Each frontend also contains a `metadata.json` with the following properties:
 

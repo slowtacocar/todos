@@ -1,5 +1,6 @@
 {
   "language": "go",
   "client": "rest",
-  "start": "go run main.go"
+  "start": "go run main.go",
+  "description": "This backend requires Go to be installed"
 }

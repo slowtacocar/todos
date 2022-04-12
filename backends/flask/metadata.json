@@ -2,5 +2,6 @@
   "language": "python",
   "client": "rest",
   "start": "python3 -m flask run",
-  "install": "python3 -m pip install -r requirements.txt"
+  "install": "python3 -m pip install -r requirements.txt",
+  "description": "This backend requires Python and pip to be installed"
 }

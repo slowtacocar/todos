@@ -8191,8 +8191,8 @@ __metadata:
 
 "todos-client@file:../../clients/rest::locator=todos-frontend%40workspace%3A.":
   version: 0.1.0
-  resolution: "todos-client@file:../../clients/rest#../../clients/rest::hash=024d34&locator=todos-frontend%40workspace%3A."
-  checksum: 235da24ea1500ee6f31e2689ccdee1fb7c34a2359a582e57000de654a048e9abf374a0aaae76f0c061043fee4049a3ec35e923944a385ffd0865d82e39ad1c46
+  resolution: "todos-client@file:../../clients/rest#../../clients/rest::hash=cf3228&locator=todos-frontend%40workspace%3A."
+  checksum: 8f10b8d027066d9a1b4325ed0bcb79340a25f9bcd382ee084e501384b89283d669af36e8a0b7f892111a7dd820b56eaef38d8ef4f9939c538968bcca6cc65020
   languageName: node
   linkType: hard
 

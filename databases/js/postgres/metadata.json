@@ -1,0 +1,4 @@
+{
+  "installer": "yarn add ../../databases/js/postgres",
+  "start": "docker run --rm -e POSTGRES_PASSWORD=$DB_PASS -p 5432:5432 postgres"
+}

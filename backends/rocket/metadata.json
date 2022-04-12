@@ -1,5 +1,6 @@
 {
   "language": "rust",
   "client": "rest",
-  "start": "cargo run"
+  "start": "cargo run",
+  "description": "This backend requires a nightly build of Rust to be installed"
 }

@@ -3,7 +3,10 @@ import fs from "fs/promises";
 import child_process from "child_process";
 import crypto from "crypto";
 import process from "process";
-import { pipeline, Transform } from "stream";
+import { Transform } from "stream";
+import { setTimeout } from "timers/promises";
+
+const controller = new AbortController();
 
 class Label extends Transform {
   constructor(label) {
@@ -13,25 +16,42 @@ class Label extends Transform {
   }
 
   _transform(chunk, encoding, callback) {
-    callback(
-      null,
-      this.td.decode(chunk).replace(/(.*\n)/g, this.label + ":\t$1")
-    );
+    callback(null, this.td.decode(chunk));
   }
 }
 
+function spawn(command, cwd, label, env) {
+  const [start, ...args] = command.split(" ");
+  const child = child_process.spawn(start, args, {
+    cwd,
+    env: env && { ...process.env, ...env },
+    shell: true,
+    signal: controller.signal,
+  });
+  child.stdout.pipe(new Label(label)).pipe(process.stdout, { end: false });
+  child.stderr.pipe(new Label(label)).pipe(process.stdout, { end: false });
+  child.on("close", () => {
+    controller.abort();
+  });
+}
+
 const backends = await fs.readdir("../backends");
-const { backend } = await prompts({
-  type: "select",
-  name: "backend",
-  message: "Pick a backend",
-  choices: backends.map((value) => ({ value })),
-});
-if (!backend) process.exit();
-const backendMetadataFile = await fs.readFile(
-  `../backends/${backend}/metadata.json`
+const backendMetadataFiles = await Promise.all(
+  backends.map((backend) => fs.readFile(`../backends/${backend}/metadata.json`))
 );
-const backendMetadata = JSON.parse(backendMetadataFile);
+const backendMetadatas = backendMetadataFiles.map((file) => JSON.parse(file));
+const { backendIndex } = await prompts({
+  type: "select",
+  name: "backendIndex",
+  message: "Pick a backend",
+  choices: backends.map((value, index) => ({
+    title: value,
+    description: backendMetadatas[index].description,
+  })),
+});
+if (backendIndex == null) process.exit();
+const backend = backends[backendIndex];
+const backendMetadata = backendMetadatas[backendIndex];
 
 const databases = await fs.readdir(`../databases/${backendMetadata.language}`);
 const { database } = await prompts({
@@ -68,81 +88,40 @@ const { theme } = await prompts({
 });
 if (!theme) process.exit();
 
-child_process.execSync(backendMetadata.install, {
-  cwd: `../backends/${backend}`,
-});
+console.log("Installing database connector...");
 child_process.execSync(databaseMetadata.installer, {
   cwd: `../backends/${backend}`,
 });
-child_process.execSync("yarn install", {
-  cwd: `../frontends/${frontend}`,
+console.log("Installing backend dependencies...");
+child_process.execSync(backendMetadata.install, {
+  cwd: `../backends/${backend}`,
 });
+console.log("Installing API connector...");
 child_process.execSync(`yarn add ../../clients/${backendMetadata.client}`, {
   cwd: `../frontends/${frontend}`,
 });
+console.log("Installing CSS theme...");
 child_process.execSync(`yarn add ../../themes/${theme}`, {
+  cwd: `../frontends/${frontend}`,
+});
+console.log("Installing frontend dependencies...");
+child_process.execSync("yarn install", {
   cwd: `../frontends/${frontend}`,
 });
 
 const pass = crypto.randomUUID();
 
 if (databaseMetadata.start) {
-  const [databaseStart, ...databaseArgs] = databaseMetadata.start
-    .replace("$DB_PASS", pass)
-    .split(" ");
-  const databaseProcess = child_process.spawn(databaseStart, databaseArgs, {
-    cwd: `../databases/${backendMetadata.language}/${database}`,
-    shell: true,
-  });
-  pipeline(
-    databaseProcess.stdout,
-    new Label("Database"),
-    process.stdout,
-    (err) => {
-      if (err) console.error(err);
-    }
-  );
-  pipeline(
-    databaseProcess.stderr,
-    new Label("Database"),
-    process.stdout,
-    (err) => {
-      if (err) console.error(err);
-    }
+  console.log("Starting database container...");
+  spawn(
+    databaseMetadata.start.replace("$DB_PASS", pass),
+    `../databases/${backendMetadata.language}/${database}`,
+    "DATABASE"
   );
 }
-
-const [backendStart, ...backendArgs] = backendMetadata.start.split(" ");
-const backendProcess = child_process.spawn(backendStart, backendArgs, {
-  cwd: `../backends/${backend}`,
-  env: { ...process.env, DB_PASS: pass },
-  shell: true,
+await setTimeout(2500, null, { signal: controller.signal });
+spawn(backendMetadata.start, `../backends/${backend}`, "BACKEND", {
+  DB_PASS: pass,
 });
-pipeline(backendProcess.stdout, new Label("Backend"), process.stdout, (err) => {
-  if (err) console.error(err);
-});
-pipeline(backendProcess.stderr, new Label("Backend"), process.stdout, (err) => {
-  if (err) console.error(err);
-});
-
-const [frontendStart, ...frontendArgs] = frontendMetadata.start.split(" ");
-const frontendProcess = child_process.spawn(frontendStart, frontendArgs, {
-  cwd: `../frontends/${frontend}`,
-  shell: true,
-});
-pipeline(
-  frontendProcess.stdout,
-  new Label("Frontend"),
-  process.stdout,
-  (err) => {
-    if (err) console.error(err);
-  }
-);
-pipeline(
-  frontendProcess.stderr,
-  new Label("Frontend"),
-  process.stdout,
-  (err) => {
-    if (err) console.error(err);
-  }
-);
+await setTimeout(2500, null, { signal: controller.signal });
+spawn(frontendMetadata.start, `../frontends/${frontend}`, "FRONTEND");

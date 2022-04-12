@@ -2,6 +2,23 @@ import prompts from "prompts";
 import fs from "fs/promises";
 import child_process from "child_process";
 import crypto from "crypto";
+import process from "process";
+import { pipeline, Transform } from "stream";
+
+class Label extends Transform {
+  constructor(label) {
+    super();
+    this.label = label;
+    this.td = new TextDecoder();
+  }
+
+  _transform(chunk, encoding, callback) {
+    callback(
+      null,
+      this.td.decode(chunk).replace(/(.*\n)/g, this.label + ":\t$1")
+    );
+  }
+}
 
 const backends = await fs.readdir("../backends");
 const { backend } = await prompts({
@@ -75,36 +92,57 @@ if (databaseMetadata.start) {
     .split(" ");
   const databaseProcess = child_process.spawn(databaseStart, databaseArgs, {
     cwd: `../databases/${backendMetadata.language}/${database}`,
+    shell: true,
   });
-  databaseProcess.stdout.on("data", (data) => {
-    console.log("Database: " + data);
-  });
-  databaseProcess.stderr.on("data", (data) => {
-    console.error("Database: " + data);
-  });
+  pipeline(
+    databaseProcess.stdout,
+    new Label("Database"),
+    process.stdout,
+    (err) => {
+      if (err) console.error(err);
+    }
+  );
+  pipeline(
+    databaseProcess.stderr,
+    new Label("Database"),
+    process.stdout,
+    (err) => {
+      if (err) console.error(err);
+    }
+  );
 }
 
 const [backendStart, ...backendArgs] = backendMetadata.start.split(" ");
 const backendProcess = child_process.spawn(backendStart, backendArgs, {
   cwd: `../backends/${backend}`,
   env: { ...process.env, DB_PASS: pass },
+  shell: true,
 });
-backendProcess.stdout.setEncoding("utf-8");
-backendProcess.stderr.setEncoding("utf-8");
-backendProcess.stdout.on("data", (data) => {
-  console.log("Backend: " + data);
+pipeline(backendProcess.stdout, new Label("Backend"), process.stdout, (err) => {
+  if (err) console.error(err);
 });
-backendProcess.stderr.on("data", (data) => {
-  console.error("Backend: " + data);
+pipeline(backendProcess.stderr, new Label("Backend"), process.stdout, (err) => {
+  if (err) console.error(err);
 });
 
 const [frontendStart, ...frontendArgs] = frontendMetadata.start.split(" ");
 const frontendProcess = child_process.spawn(frontendStart, frontendArgs, {
   cwd: `../frontends/${frontend}`,
+  shell: true,
 });
-frontendProcess.stdout.on("data", (data) => {
-  console.log("Frontend: " + data);
-});
-frontendProcess.stderr.on("data", (data) => {
-  console.error("Frontend: " + data);
-});
+pipeline(
+  frontendProcess.stdout,
+  new Label("Frontend"),
+  process.stdout,
+  (err) => {
+    if (err) console.error(err);
+  }
+);
+pipeline(
+  frontendProcess.stderr,
+  new Label("Frontend"),
+  process.stdout,
+  (err) => {
+    if (err) console.error(err);
+  }
+);

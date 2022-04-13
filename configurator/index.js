@@ -118,10 +118,9 @@ if (databaseMetadata.start) {
     `../databases/${backendMetadata.language}/${database}`,
     "DATABASE"
   );
+  await setTimeout(10000, null, { signal: controller.signal });
 }
-await setTimeout(2500, null, { signal: controller.signal });
 spawn(backendMetadata.start, `../backends/${backend}`, "BACKEND", {
   DB_PASS: pass,
 });
-await setTimeout(2500, null, { signal: controller.signal });
 spawn(frontendMetadata.start, `../frontends/${frontend}`, "FRONTEND");

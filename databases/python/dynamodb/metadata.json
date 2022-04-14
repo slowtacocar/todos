@@ -1,0 +1,4 @@
+{
+  "installer": "pip3 install -e ../../databases/python/dynamodb",
+  "start": "docker run --rm -p 8000:8000 amazon/dynamodb-local"
+}

@@ -17,7 +17,7 @@ await client.query(
 export async function getTodos() {
   const res = await client.query(
     q.Map(q.Paginate(q.Documents(q.Collection("Todos"))), (ref) =>
-      q.Merge({ id: Select("id", ref) }, Select("data", Get(ref)))
+      q.Merge({ id: q.Select("id", ref) }, q.Select("data", q.Get(ref)))
     )
   );
   return res.data;

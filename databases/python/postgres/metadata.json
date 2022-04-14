@@ -1,0 +1,4 @@
+{
+  "installer": "pip3 install -e ../../databases/python/postgres",
+  "start": "docker run --rm -e POSTGRES_PASSWORD=$DB_PASS -p 5432:5432 postgres"
+}

@@ -92,10 +92,12 @@ console.log("Installing database connector...");
 child_process.execSync(databaseMetadata.installer, {
   cwd: `../backends/${backend}`,
 });
-console.log("Installing backend dependencies...");
-child_process.execSync(backendMetadata.install, {
-  cwd: `../backends/${backend}`,
-});
+if (backendMetadata.install) {
+  console.log("Installing backend dependencies...");
+  child_process.execSync(backendMetadata.install, {
+    cwd: `../backends/${backend}`,
+  });
+}
 console.log("Installing API connector...");
 child_process.execSync(`yarn add ../../clients/${backendMetadata.client}`, {
   cwd: `../frontends/${frontend}`,

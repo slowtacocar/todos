@@ -13,18 +13,14 @@ await client.query(
     name: "Todos",
   })
 );
-await client.query(
-  q.CreateIndex({
-    name: "all_Todos",
-    source: q.Collection("Todos"),
-  })
-);
 
 export async function getTodos() {
   const res = await client.query(
-    q.Map(q.Paginate(q.Match(q.Index("all_Todos"))), (ref) => q.Get(ref))
+    q.Map(q.Paginate(q.Documents(q.Collection("Todos"))), (ref) =>
+      q.Merge({ id: Select("id", ref) }, Select("data", Get(ref)))
+    )
   );
-  return res.data.map((doc) => ({ ...doc.data, id: doc.ref.id }));
+  return res.data;
 }
 
 export async function addTodo(todo) {

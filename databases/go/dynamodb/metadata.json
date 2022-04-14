@@ -1,0 +1,4 @@
+{
+  "installer": "sed -i '' '11s/.*/replace todos-database => ..\\/..\\/databases\\/go\\/dynamodb/' go.mod",
+  "start": "docker run --rm -p 8000:8000 amazon/dynamodb-local"
+}

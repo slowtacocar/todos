@@ -13,13 +13,13 @@ await client.query(
 );
 
 export async function getTodos() {
-  const res = await client.query("SELECT * FROM todos");
+  const res = await client.query("SELECT id, text, done FROM todos");
   return res.rows;
 }
 
 export async function addTodo(todo) {
   const res = await client.query(
-    "INSERT INTO todos(text, done) VALUES($1, $2) RETURNING *",
+    "INSERT INTO todos(text, done) VALUES($1, $2) RETURNING id, text, done",
     [todo.text, todo.done]
   );
   return res.rows[0];

@@ -1,0 +1,4 @@
+{
+  "installer": "sed -i '' '11s/.*/replace todos-database => ..\\/..\\/databases\\/go\\/mongodb/' go.mod",
+  "start": "docker run --rm -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=$DB_PASS -p 27017:27017 mongo"
+}

@@ -1,0 +1,4 @@
+{
+  "installer": "sed -i '' '11s/.*/replace todos-database => ..\\/..\\/databases\\/go\\/postgres/' go.mod",
+  "start": "docker run --rm -e POSTGRES_PASSWORD=$DB_PASS -p 5432:5432 postgres"
+}

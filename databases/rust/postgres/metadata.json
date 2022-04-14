@@ -1,0 +1,4 @@
+{
+  "installer": "sed -i '' '10s/.*/todos_database = { path = \\\"..\\/..\\/databases\\/rust\\/postgres\\\" }/' Cargo.toml",
+  "start": "docker run --rm -e POSTGRES_PASSWORD=$DB_PASS -p 5432:5432 postgres"
+}

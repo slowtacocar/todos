@@ -23,33 +23,47 @@ type Todo struct {
 	Done bool   `json:"done"`
 }
 
-var cfg, _ = config.LoadDefaultConfig(
-	context.TODO(),
-	config.WithEndpointResolverWithOptions(aws.EndpointResolverWithOptionsFunc(func(service, region string, options ...interface{}) (aws.Endpoint, error) {
-		return aws.Endpoint{URL: "http://localhost:8000"}, nil
-	})),
-)
-var svc = dynamodb.NewFromConfig(cfg)
+type TodosDatabase struct {
+	svc *dynamodb.Client
+}
 
-var _, _ = svc.CreateTable(context.TODO(), &dynamodb.CreateTableInput{
-	TableName: aws.String("todos"),
-	BillingMode: types.BillingModePayPerRequest,
-	AttributeDefinitions: []types.AttributeDefinition{
-		types.AttributeDefinition{
-			AttributeName: aws.String("Id"),
-			AttributeType: types.ScalarAttributeTypeS,
+func NewTodosDatabase() TodosDatabase {
+	cfg, err := config.LoadDefaultConfig(
+		context.TODO(),
+		config.WithEndpointResolverWithOptions(aws.EndpointResolverWithOptionsFunc(func(service, region string, options ...interface{}) (aws.Endpoint, error) {
+			return aws.Endpoint{URL: "http://localhost:8000"}, nil
+		})),
+	)
+	if err != nil {
+		panic(err)
+	}
+	svc := dynamodb.NewFromConfig(cfg)
+	_, err = svc.CreateTable(context.TODO(), &dynamodb.CreateTableInput{
+		TableName: aws.String("todos"),
+		BillingMode: types.BillingModePayPerRequest,
+		AttributeDefinitions: []types.AttributeDefinition{
+			types.AttributeDefinition{
+				AttributeName: aws.String("Id"),
+				AttributeType: types.ScalarAttributeTypeS,
+			},
 		},
-	},
-	KeySchema: []types.KeySchemaElement{
-		types.KeySchemaElement{
-			AttributeName: aws.String("Id"),
-			KeyType: types.KeyTypeHash,
+		KeySchema: []types.KeySchemaElement{
+			types.KeySchemaElement{
+				AttributeName: aws.String("Id"),
+				KeyType: types.KeyTypeHash,
+			},
 		},
-	},
-})
+	})
+	if err != nil {
+		panic(err)
+	}
+	return TodosDatabase{
+		svc: svc,
+	}
+}
 
-func GetTodos() []Todo {
-	resp, err := svc.Scan(context.TODO(), &dynamodb.ScanInput{
+func (t TodosDatabase) GetTodos() []Todo {
+	resp, err := t.svc.Scan(context.TODO(), &dynamodb.ScanInput{
 		TableName: aws.String("todos"),
 	})
 	if err != nil {
@@ -64,7 +78,7 @@ func GetTodos() []Todo {
 	return todos
 }
 
-func AddTodo(todo TodoInput) Todo {
+func (t TodosDatabase) AddTodo(todo TodoInput) Todo {
 	item := Todo{
 		Id: uuid.NewString(),
 		Text: *todo.Text,
@@ -76,7 +90,7 @@ func AddTodo(todo TodoInput) Todo {
 		panic(err)
 	}
 
-	_, err = svc.PutItem(context.TODO(), &dynamodb.PutItemInput{
+	_, err = t.svc.PutItem(context.TODO(), &dynamodb.PutItemInput{
 		TableName: aws.String("todos"),
 		Item: av,
 	})
@@ -87,7 +101,7 @@ func AddTodo(todo TodoInput) Todo {
 	return item
 }
 
-func UpdateTodo(id string, update TodoInput) {
+func (t TodosDatabase) UpdateTodo(id string, update TodoInput) {
 	var builder expression.UpdateBuilder
 	if update.Text != nil {
 		builder = expression.Set(
@@ -109,7 +123,7 @@ func UpdateTodo(id string, update TodoInput) {
 		panic(err)
 	}
 
-	_, err = svc.UpdateItem(context.TODO(), &dynamodb.UpdateItemInput{
+	_, err = t.svc.UpdateItem(context.TODO(), &dynamodb.UpdateItemInput{
 		ExpressionAttributeNames: expr.Names(),
 		ExpressionAttributeValues: expr.Values(),
 		Key: map[string]types.AttributeValue{
@@ -123,8 +137,8 @@ func UpdateTodo(id string, update TodoInput) {
 	}
 }
 
-func DeleteTodo(id string) {
-	_, err := svc.DeleteItem(context.TODO(), &dynamodb.DeleteItemInput{
+func (t TodosDatabase) DeleteTodo(id string) {
+	_, err := t.svc.DeleteItem(context.TODO(), &dynamodb.DeleteItemInput{
 		Key: map[string]types.AttributeValue{
 			"Id": &types.AttributeValueMemberS{Value: id},
 		},

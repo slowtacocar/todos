@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { addTodo, deleteTodo, getTodos, updateTodo } from "todos-database";
+import newTodosDatabase from "todos-database";
 import { graphqlHTTP } from "express-graphql";
 import { buildSchema } from "graphql";
 
@@ -27,19 +27,21 @@ const schema = buildSchema(`
   }
 `);
 
+const todosDatabase = await newTodosDatabase();
+
 const root = {
   async getTodos() {
-    return await getTodos();
+    return await todosDatabase.getTodos();
   },
   async addTodo({ todo }) {
-    return await addTodo(todo);
+    return await todosDatabase.addTodo(todo);
   },
   async updateTodo({ id, update }) {
-    await updateTodo(id, update);
+    await todosDatabase.updateTodo(id, update);
     return id;
   },
   async deleteTodo({ id }) {
-    await deleteTodo(id);
+    await todosDatabase.deleteTodo(id);
     return id;
   },
 };

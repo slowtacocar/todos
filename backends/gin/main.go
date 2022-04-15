@@ -11,27 +11,29 @@ func main() {
 
 	r.Use(cors.Default())
 
+	database := todos_database.NewTodosDatabase()
+
 	r.GET("/todos", func(c *gin.Context) {
-		todos := todos_database.GetTodos()
+		todos := database.GetTodos()
 		c.JSON(200, todos)
 	})
 
 	r.POST("/todos", func(c *gin.Context) {
 		var input todos_database.TodoInput
 		c.BindJSON(&input)
-		todo := todos_database.AddTodo(input)
+		todo := database.AddTodo(input)
 		c.JSON(200, todo)
 	})
 
 	r.PATCH("/todos/:id", func(c *gin.Context) {
 		var input todos_database.TodoInput
 		c.BindJSON(&input)
-		todos_database.UpdateTodo(c.Param("id"), input)
+		database.UpdateTodo(c.Param("id"), input)
 		c.Status(204)
 	})
 
 	r.DELETE("/todos/:id", func(c *gin.Context) {
-		todos_database.DeleteTodo(c.Param("id"))
+		database.DeleteTodo(c.Param("id"))
 		c.Status(204)
 	})
 

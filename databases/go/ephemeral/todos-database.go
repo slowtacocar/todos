@@ -13,11 +13,19 @@ type Todo struct {
 	Done bool   `json:"done"`
 }
 
-var todos []TodoInput
+type TodosDatabase struct {
+	todos []TodoInput
+}
 
-func GetTodos() []Todo {
-	response := make([]Todo, len(todos))
-	for id, doc := range todos {
+func NewTodosDatabase() TodosDatabase {
+	return TodosDatabase{
+		todos: make([]TodoInput, 0),
+	}
+}
+
+func (t TodosDatabase) GetTodos() []Todo {
+	response := make([]Todo, len(t.todos))
+	for id, doc := range t.todos {
 		response[id] = Todo{
 			Id:   strconv.Itoa(id),
 			Text: *doc.Text,
@@ -27,32 +35,32 @@ func GetTodos() []Todo {
 	return response
 }
 
-func AddTodo(todo TodoInput) Todo {
-	todos = append(todos, todo)
+func (t *TodosDatabase) AddTodo(todo TodoInput) Todo {
+	t.todos = append(t.todos, todo)
 	return Todo{
-		Id:   strconv.Itoa(len(todos) - 1),
+		Id:   strconv.Itoa(len(t.todos) - 1),
 		Text: *todo.Text,
 		Done: *todo.Done,
 	}
 }
 
-func UpdateTodo(id string, update TodoInput) {
+func (t TodosDatabase) UpdateTodo(id string, update TodoInput) {
 	index, err := strconv.Atoi(id)
 	if err != nil {
 		panic(err)
 	}
 	if update.Text != nil {
-		todos[index].Text = update.Text
+		t.todos[index].Text = update.Text
 	}
 	if update.Done != nil {
-		todos[index].Done = update.Done
+		t.todos[index].Done = update.Done
 	}
 }
 
-func DeleteTodo(id string) {
+func (t *TodosDatabase) DeleteTodo(id string) {
 	index, err := strconv.Atoi(id)
 	if err != nil {
 		panic(err)
 	}
-	todos = append(todos[:index], todos[index+1:]...)
+	t.todos = append(t.todos[:index], t.todos[index+1:]...)
 }

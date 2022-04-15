@@ -18,13 +18,21 @@ var client = f.NewFaunaClient(
 	f.Endpoint("http://localhost:8443/"),
 )
 
-var _, _ = client.Query(
-	f.CreateCollection(f.Obj{
-		"name": "Todos",
-	}),
-)
+type TodosDatabase struct {}
 
-func GetTodos() []Todo {
+func NewTodosDatabase() TodosDatabase {
+	_, err := client.Query(
+		f.CreateCollection(f.Obj{
+			"name": "Todos",
+		}),
+	)
+	if err != nil {
+		panic(err)
+	}
+	return TodosDatabase{}
+}
+
+func (t TodosDatabase) GetTodos() []Todo {
 	res, err := client.Query(
 		f.Map(
 			f.Paginate(f.Documents(f.Collection("Todos"))),
@@ -50,7 +58,7 @@ func GetTodos() []Todo {
 	return data
 }
 
-func AddTodo(todo TodoInput) Todo {
+func (t TodosDatabase) AddTodo(todo TodoInput) Todo {
 	res, err := client.Query(
 		f.Create(f.Collection("Todos"), f.Obj{
 			"data": todo,
@@ -78,7 +86,7 @@ func AddTodo(todo TodoInput) Todo {
 	}
 }
 
-func UpdateTodo(id string, update TodoInput) {
+func (t TodosDatabase) UpdateTodo(id string, update TodoInput) {
 	_, err := client.Query(
 		f.Update(f.Ref(f.Collection("Todos"), id), f.Obj{
 			"data": update,
@@ -89,7 +97,7 @@ func UpdateTodo(id string, update TodoInput) {
 	}
 }
 
-func DeleteTodo(id string) {
+func (t TodosDatabase) DeleteTodo(id string) {
 	_, err := client.Query(f.Delete(f.Ref(f.Collection("Todos"), id)))
 	if err != nil {
 		panic(err)

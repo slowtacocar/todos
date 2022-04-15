@@ -725,8 +725,8 @@ __metadata:
 
 "todos-client@file:../../clients/rest::locator=todos-frontend%40workspace%3A.":
   version: 0.1.0
-  resolution: "todos-client@file:../../clients/rest#../../clients/rest::hash=024d34&locator=todos-frontend%40workspace%3A."
-  checksum: 235da24ea1500ee6f31e2689ccdee1fb7c34a2359a582e57000de654a048e9abf374a0aaae76f0c061043fee4049a3ec35e923944a385ffd0865d82e39ad1c46
+  resolution: "todos-client@file:../../clients/rest#../../clients/rest::hash=cf3228&locator=todos-frontend%40workspace%3A."
+  checksum: 8f10b8d027066d9a1b4325ed0bcb79340a25f9bcd382ee084e501384b89283d669af36e8a0b7f892111a7dd820b56eaef38d8ef4f9939c538968bcca6cc65020
   languageName: node
   linkType: hard
 
@@ -736,14 +736,14 @@ __metadata:
   dependencies:
     serve: ^13.0.2
     todos-client: ../../clients/rest
-    todos-theme: ../../themes/test
+    todos-theme: ../../themes/none
   languageName: unknown
   linkType: soft
 
-"todos-theme@file:../../themes/test::locator=todos-frontend%40workspace%3A.":
+"todos-theme@file:../../themes/none::locator=todos-frontend%40workspace%3A.":
   version: 0.1.0
-  resolution: "todos-theme@file:../../themes/test#../../themes/test::hash=16fe58&locator=todos-frontend%40workspace%3A."
-  checksum: cbbd8cccb3c9269622463aca38b326f2fe787d2a43c46b2998500b0e31615bceed1606224d4fdd0ec9d5ceb63cf7ccdce7e093923ab3fb511ca1dbe4ab191e35
+  resolution: "todos-theme@file:../../themes/none#../../themes/none::hash=86d531&locator=todos-frontend%40workspace%3A."
+  checksum: cd37b56d4dbf230a65e9654cb8d5ebffbcf6e6066964443df24e9c5369f36cc80c34373aa70cf1890a05418ca4dce884a9446074a6685b5c9db94dd093596c98
   languageName: node
   linkType: hard
 

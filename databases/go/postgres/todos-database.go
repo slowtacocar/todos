@@ -19,11 +19,26 @@ type Todo struct {
 	Done bool   `json:"done"`
 }
 
-var conn, _ = pgx.Connect(context.TODO(), "postgres://postgres:" + os.Getenv("DB_PASS") + "@localhost:5432/postgres")
-var _, _ = conn.Exec(context.TODO(), "CREATE TABLE IF NOT EXISTS todos(id SERIAL PRIMARY KEY, text TEXT, done BOOLEAN)")
+type TodosDatabase struct {
+	conn *pgx.Conn
+}
 
-func GetTodos() []Todo {
-	rows, err := conn.Query(context.TODO(), "SELECT id, text, done FROM todos")
+func NewTodosDatabase() TodosDatabase {
+	conn, err := pgx.Connect(context.TODO(), "postgres://postgres:" + os.Getenv("DB_PASS") + "@localhost:5432/postgres")
+	if err != nil {
+		panic(err)
+	}
+	_, err = conn.Exec(context.TODO(), "CREATE TABLE IF NOT EXISTS todos(id SERIAL PRIMARY KEY, text TEXT, done BOOLEAN)")
+	if err != nil {
+		panic(err)
+	}
+	return TodosDatabase{
+		conn: conn,
+	}
+}
+
+func (t TodosDatabase) GetTodos() []Todo {
+	rows, err := t.conn.Query(context.TODO(), "SELECT id, text, done FROM todos")
 	if err != nil {
 		panic(err)
 	}
@@ -45,10 +60,10 @@ func GetTodos() []Todo {
 	return response
 }
 
-func AddTodo(todo TodoInput) Todo {
+func (t TodosDatabase) AddTodo(todo TodoInput) Todo {
 	var id int
 	var response Todo
-	err := conn.QueryRow(context.TODO(), "INSERT INTO todos(text, done) VALUES($1, $2) RETURNING id, text, done", todo.Text, todo.Done).Scan(&id, &response.Text, &response.Done)
+	err := t.conn.QueryRow(context.TODO(), "INSERT INTO todos(text, done) VALUES($1, $2) RETURNING id, text, done", todo.Text, todo.Done).Scan(&id, &response.Text, &response.Done)
 	if err != nil {
 		panic(err)
 	}
@@ -56,35 +71,35 @@ func AddTodo(todo TodoInput) Todo {
 	return response
 }
 
-func UpdateTodo(id string, update TodoInput) {
+func (t TodosDatabase) UpdateTodo(id string, update TodoInput) {
 	idInt, err := strconv.Atoi(id)
 	if err != nil {
 		panic(err)
 	}
 	if update.Text != nil && update.Done != nil {
-		_, err = conn.Exec(context.TODO(), "UPDATE todos SET text = $1, done = $2 WHERE id = $3", update.Text, update.Done, idInt)
+		_, err = t.conn.Exec(context.TODO(), "UPDATE todos SET text = $1, done = $2 WHERE id = $3", update.Text, update.Done, idInt)
 		if err != nil {
 			panic(err)
 		}
 	} else if update.Text != nil {
-		_, err = conn.Exec(context.TODO(), "UPDATE todos SET text = $1 WHERE id = $2", update.Text, idInt)
+		_, err = t.conn.Exec(context.TODO(), "UPDATE todos SET text = $1 WHERE id = $2", update.Text, idInt)
 		if err != nil {
 			panic(err)
 		}
 	} else if update.Done != nil {
-		_, err = conn.Exec(context.TODO(), "UPDATE todos SET done = $1 WHERE id = $2", update.Done, idInt)
+		_, err = t.conn.Exec(context.TODO(), "UPDATE todos SET done = $1 WHERE id = $2", update.Done, idInt)
 		if err != nil {
 			panic(err)
 		}
 	}
 }
 
-func DeleteTodo(id string) {
+func (t TodosDatabase) DeleteTodo(id string) {
 	idInt, err := strconv.Atoi(id)
 	if err != nil {
 		panic(err)
 	}
-	_, err = conn.Exec(context.TODO(), "DELETE FROM todos WHERE id = $1", idInt)
+	_, err = t.conn.Exec(context.TODO(), "DELETE FROM todos WHERE id = $1", idInt)
 	if err != nil {
 		panic(err)
 	}
